@@ -165,7 +165,9 @@ class TurfBooking:
         requested_end = requested_start + timedelta(minutes=self.slot_minutes)
         self.booked_slots.append((requested_start, requested_end))
 
-        logger.info(f"Successfully booked slot: {requested_start} to {requested_end}")
+        logger.info(
+            f"Successfully booked slot: {requested_start} to {requested_end}"
+        )
         return requested_start, requested_end
 
     def get_bookings(self) -> List[Tuple[datetime, datetime]]:
