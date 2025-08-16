@@ -1,7 +1,7 @@
 import pytest
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.booking_system import TurfBooking, SlotUnavailableError, BookingInPastError
+from src.booking_system import TurfBooking, SlotUnavailableError, BookingInPastError, InvalidSlotDurationError
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 
@@ -238,4 +238,16 @@ def test_large_slot_duration():
 
 
 
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_zero_or_negative_slot_duration():
+    """Test edge cases with invalid slot durations"""
+    # This should ideally be handled in __init__ with validation
+    
+    with pytest.raises(InvalidSlotDurationError):
+                turf = TurfBooking(slot_minutes=0)
+
+    with pytest.raises(InvalidSlotDurationError):
+                turf = TurfBooking(slot_minutes=-30)
 
