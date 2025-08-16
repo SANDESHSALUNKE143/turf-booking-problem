@@ -12,8 +12,8 @@ from datetime import datetime, timedelta
 @freeze_time("2025-01-01 06:00:00")
 def test_book_first_slot():
     turf = TurfBooking(slot_minutes=30)
-    start = datetime(2025, 1, 1, 7, 0)
-    assert turf.book_slot(start) is True
+    start = datetime(2025, 1, 1, 7, 12)
+    assert turf.is_slot_available(start) is True
 
 @freeze_time("2025-01-01 06:00:00")
 def test_overlapping_slot_not_allowed():
@@ -22,7 +22,7 @@ def test_overlapping_slot_not_allowed():
     turf.book_slot(first)
     
     overlap = datetime(2025, 1, 1, 7, 15)
-    assert turf.book_slot(overlap) is False
+    assert turf.is_slot_available(overlap) is False
 
 @freeze_time("2025-01-01 06:00:00")
 def test_booking_in_past():
@@ -45,11 +45,15 @@ def test_multiple_bookings():
     s1 = datetime(2025, 1, 1, 6, 0)
     s2 = datetime(2025, 1, 1, 6, 30)
     s3 = datetime(2025, 1, 1, 7, 0)
+    s4 = datetime(2025, 1, 1, 6, 45)
+
 
     assert turf.book_slot(s1) is True
     assert turf.book_slot(s2) is True
     assert turf.book_slot(s3) is True
     assert len(turf.get_bookings()) == 3
+    assert turf.is_slot_available(s4) is False
+
 
 
 @freeze_time("2025-01-01 06:00:00")
@@ -66,3 +70,16 @@ def test_boundary_non_overlap():
     s2 = datetime(2025, 1, 1, 9, 30)  # Exactly after previous slot
     assert turf.book_slot(s1) is True
     assert turf.book_slot(s2) is True
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_multiple_bookings_with_dynamic_slots():
+    turf = TurfBooking(slot_minutes=30)
+    s1 = datetime(2025, 1, 1, 6, 0)
+    s2 = datetime(2025, 1, 1, 6, 23)
+
+    assert turf.book_slot(s1) is True
+    assert turf.is_slot_available(s2) is False
+    assert len(turf.get_bookings()) == 1
+
+
