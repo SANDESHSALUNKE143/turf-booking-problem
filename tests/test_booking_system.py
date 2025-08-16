@@ -95,3 +95,15 @@ def test_multiple_bookings_with_dynamic_slots():
     with pytest.raises(SlotUnavailableError):
         turf.is_slot_available(s2)
     assert len(turf.get_bookings()) == 1
+
+
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_booking_ofunalligned_slots():
+    turf = TurfBooking(slot_minutes=30)
+    s1 = datetime(2025, 1, 1, 6, 0)
+    s2 = datetime(2025, 1, 1, 6, 33)
+
+    turf.book_slot(s1)
+    assert turf.is_slot_available(s2) is True
