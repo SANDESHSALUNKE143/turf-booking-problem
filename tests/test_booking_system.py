@@ -20,3 +20,8 @@ def test_overlapping_slot_not_allowed():
     
     overlap = datetime(2025, 1, 1, 7, 15)
     assert turf.book_slot(overlap) is False
+
+def test_booking_in_past():
+    turf = TurfBooking(slot_minutes=30)
+    past_time = datetime(2024, 12, 31, 23, 0)
+    assert turf.book_slot(past_time) is False
