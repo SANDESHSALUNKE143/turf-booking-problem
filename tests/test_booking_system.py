@@ -58,3 +58,11 @@ def test_double_booking_same_slot():
     start = datetime(2025, 1, 1, 8, 0)
     assert turf.book_slot(start) is True
     assert turf.book_slot(start) is False
+
+@freeze_time("2025-01-01 06:00:00")
+def test_boundary_non_overlap():
+    turf = TurfBooking(slot_minutes=30)
+    s1 = datetime(2025, 1, 1, 9, 0)
+    s2 = datetime(2025, 1, 1, 9, 30)  # Exactly after previous slot
+    assert turf.book_slot(s1) is True
+    assert turf.book_slot(s2) is True
