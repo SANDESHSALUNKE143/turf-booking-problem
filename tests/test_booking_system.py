@@ -128,3 +128,11 @@ def test_back_to_back_cross_midnight():
     slot2 = datetime(2025, 1, 2, 0, 0)
     turf.book_slot(slot1)
     assert turf.is_slot_available(slot2) is True
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_booking_at_now():
+    turf = TurfBooking(slot_minutes=30)
+    now = datetime.now()
+    turf.book_slot(now)
+    assert turf.get_bookings()[0][0] == now
