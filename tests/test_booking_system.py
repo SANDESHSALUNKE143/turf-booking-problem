@@ -2,7 +2,7 @@ import pytest
 import sys, os
 import os, sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from booking_system import TurfBooking
+from src.booking_system import TurfBooking
 from freezegun import freeze_time
 
 
