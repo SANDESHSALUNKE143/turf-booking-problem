@@ -24,6 +24,13 @@ class InvalidSlotDurationError(Exception):
     """Raised when slot duration is invalid."""
     pass
 
+class InvalidSlotRequestError(Exception):
+    """Raised when the requested slot input is invalid (e.g., not a datetime object)."""
+    def __init__(self, message: str, invalid_value=None):
+        super().__init__(message)
+        self.invalid_value = invalid_value
+
+
 class TurfBooking:
     def __init__(self, slot_minutes=30):
         """
@@ -87,9 +94,13 @@ class TurfBooking:
             SlotUnavailableError: If slot conflicts with existing bookings
             TypeError: If requested_start is not a datetime object
         """
+
         if not isinstance(requested_start, datetime):
-            raise TypeError(f"requested_start must be a datetime object, got: {type(requested_start)}")
-            
+            raise InvalidSlotRequestError(
+                f"requested_start must be a datetime object, got: {type(requested_start)}",
+                invalid_value=requested_start
+            )
+           
         requested_end = requested_start + timedelta(minutes=self.slot_minutes)
         
         conflicting_slots = self._find_conflicting_slots(requested_start, requested_end)
@@ -119,9 +130,12 @@ class TurfBooking:
             SlotUnavailableError: If slot is not available
             TypeError: If requested_start is not a datetime object
         """
-        if not isinstance(requested_start, datetime):
-            raise TypeError(f"requested_start must be a datetime object, got: {type(requested_start)}")
         
+        if not isinstance(requested_start, datetime):
+            raise InvalidSlotRequestError(
+                f"requested_start must be a datetime object, got: {type(requested_start)}",
+                invalid_value=requested_start
+            )
         current_time = self._get_current_time()
         
         # Check if booking is in the past

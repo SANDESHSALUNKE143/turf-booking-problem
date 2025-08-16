@@ -5,7 +5,7 @@ Tests that verify proper error conditions and input validation
 import pytest
 import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.booking_system import TurfBooking, SlotUnavailableError, BookingInPastError, InvalidSlotDurationError
+from src.booking_system import TurfBooking, SlotUnavailableError, BookingInPastError, InvalidSlotDurationError, InvalidSlotRequestError
 from freezegun import freeze_time
 from datetime import datetime, timedelta
 
@@ -44,22 +44,22 @@ def test_input_validation():
     turf = TurfBooking(slot_minutes=30)
     
     # Test None input
-    with pytest.raises(TypeError):
+    with pytest.raises(InvalidSlotRequestError):
         turf.is_slot_available(None)
     
-    with pytest.raises(TypeError):
+    with pytest.raises(InvalidSlotRequestError):
         turf.book_slot(None)
     
     # Test string input
-    with pytest.raises(TypeError):
+    with pytest.raises(InvalidSlotRequestError):
         turf.is_slot_available("2025-01-01 08:00")
     
     # Test integer input
-    with pytest.raises(TypeError):
+    with pytest.raises(InvalidSlotRequestError):
         turf.book_slot(20250101)
     
     # Test list input
-    with pytest.raises(TypeError):
+    with pytest.raises(InvalidSlotRequestError):
         turf.book_slot([2025, 1, 1, 8, 0])
 
 
