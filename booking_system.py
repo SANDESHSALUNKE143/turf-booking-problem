@@ -1,4 +1,3 @@
-# turf_booking_system/booking_system.py
 from datetime import datetime, timedelta
 
 class TurfBooking:
@@ -7,6 +6,9 @@ class TurfBooking:
         self.booked_slots = []
 
     def book_slot(self, requested_start: datetime):
+
+        if requested_start < datetime.now():
+            return False
     
         requested_end = requested_start + timedelta(minutes=self.slot_minutes)
         for start, end in self.booked_slots:
