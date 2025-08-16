@@ -50,3 +50,11 @@ def test_multiple_bookings():
     assert turf.book_slot(s2) is True
     assert turf.book_slot(s3) is True
     assert len(turf.get_bookings()) == 3
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_double_booking_same_slot():
+    turf = TurfBooking(slot_minutes=30)
+    start = datetime(2025, 1, 1, 8, 0)
+    assert turf.book_slot(start) is True
+    assert turf.book_slot(start) is False
