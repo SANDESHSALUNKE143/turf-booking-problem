@@ -8,8 +8,26 @@ class BookingInPastError(Exception):
     """Raised when trying to book a slot in the past."""
     pass
 
+class InvalidSlotDurationError(Exception):
+    """Raised when slot duration is invalid."""
+    pass
+
 class TurfBooking:
     def __init__(self, slot_minutes=30):
+        """
+        Initialize the turf booking system.
+        
+        Args:
+            slot_minutes: Duration of each slot in minutes (must be positive)
+            
+        Raises:
+            InvalidSlotDurationError: If slot_minutes is not positive
+        """
+
+        if not isinstance(slot_minutes, int) or slot_minutes <= 0:
+            raise InvalidSlotDurationError(f"Slot duration must be a positive integer, got: {slot_minutes}")
+        
+
         self.slot_minutes = slot_minutes
         self.booked_slots = []
 
