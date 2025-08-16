@@ -107,3 +107,15 @@ def test_booking_ofunalligned_slots():
 
     turf.book_slot(s1)
     assert turf.is_slot_available(s2) is True
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_overlapping_multiple_slots():
+    turf = TurfBooking(slot_minutes=30)
+    s1 = datetime(2025, 1, 1, 7, 0)
+    s2 = datetime(2025, 1, 1, 7, 30)
+    turf.book_slot(s1)
+    turf.book_slot(s2)
+    overlap = datetime(2025, 1, 1, 7, 15)  # overlaps both s1 and s2
+    with pytest.raises(SlotUnavailableError):
+        turf.is_slot_available(overlap)
