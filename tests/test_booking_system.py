@@ -136,3 +136,11 @@ def test_booking_at_now():
     now = datetime.now()
     turf.book_slot(now)
     assert turf.get_bookings()[0][0] == now
+
+@freeze_time("2025-01-01 00:00:00")
+def test_many_sequential_bookings():
+    turf = TurfBooking(slot_minutes=30)
+    for i in range(0, 24*2):  # 48 half-hour slots in a day
+        start = datetime(2025, 1, 1) + timedelta(minutes=30*i)
+        turf.book_slot(start)
+    assert len(turf.get_bookings()) == 48
