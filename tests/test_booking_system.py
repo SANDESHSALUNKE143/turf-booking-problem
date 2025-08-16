@@ -37,3 +37,16 @@ def test_booking_cross_midnight():
     late = datetime(2025, 1, 1, 23, 30)
     assert turf.book_slot(late) is True
     assert turf.get_bookings()[0][1] == datetime(2025, 1, 2, 0, 0)
+
+
+@freeze_time("2025-01-01 06:00:00")
+def test_multiple_bookings():
+    turf = TurfBooking(slot_minutes=30)
+    s1 = datetime(2025, 1, 1, 6, 0)
+    s2 = datetime(2025, 1, 1, 6, 30)
+    s3 = datetime(2025, 1, 1, 7, 0)
+
+    assert turf.book_slot(s1) is True
+    assert turf.book_slot(s2) is True
+    assert turf.book_slot(s3) is True
+    assert len(turf.get_bookings()) == 3
