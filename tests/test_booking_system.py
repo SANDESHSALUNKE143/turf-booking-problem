@@ -11,3 +11,12 @@ def test_book_first_slot():
     turf = TurfBooking(slot_minutes=30)
     start = datetime(2025, 1, 1, 7, 0)
     assert turf.book_slot(start) is True
+
+
+def test_overlapping_slot_not_allowed():
+    turf = TurfBooking(slot_minutes=30)
+    first = datetime(2025, 1, 1, 7, 0)
+    turf.book_slot(first)
+    
+    overlap = datetime(2025, 1, 1, 7, 15)
+    assert turf.book_slot(overlap) is False
