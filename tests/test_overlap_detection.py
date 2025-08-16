@@ -2,8 +2,10 @@ import pytest
 from datetime import datetime, timedelta
 from freezegun import freeze_time
 import sys, os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.booking_system import TurfBooking, SlotUnavailableError
+
 
 @freeze_time("2025-01-01 06:00:00")
 def test_overlapping_slot_not_allowed():
@@ -14,6 +16,7 @@ def test_overlapping_slot_not_allowed():
     with pytest.raises(SlotUnavailableError):
         turf.book_slot(overlap)
 
+
 @freeze_time("2025-01-01 06:00:00")
 def test_double_booking_same_slot():
     turf = TurfBooking(slot_minutes=30)
@@ -21,6 +24,7 @@ def test_double_booking_same_slot():
     turf.book_slot(start)
     with pytest.raises(SlotUnavailableError):
         turf.book_slot(start)
+
 
 @freeze_time("2025-01-01 06:00:00")
 def test_overlapping_multiple_slots():

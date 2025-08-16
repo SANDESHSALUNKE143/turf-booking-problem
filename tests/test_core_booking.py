@@ -1,9 +1,11 @@
 import pytest
 import sys, os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.booking_system import TurfBooking, SlotUnavailableError, BookingInPastError
 from freezegun import freeze_time
 from datetime import datetime, timedelta
+
 
 @freeze_time("2025-01-01 06:00:00")
 def test_book_first_slot():
@@ -14,6 +16,7 @@ def test_book_first_slot():
     with pytest.raises(SlotUnavailableError):
         turf.is_slot_available(start)
 
+
 @freeze_time("2025-01-01 06:00:00")
 def test_booking_in_past():
     turf = TurfBooking(slot_minutes=30)
@@ -21,12 +24,14 @@ def test_booking_in_past():
     with pytest.raises(BookingInPastError):
         turf.book_slot(past_time)
 
+
 @freeze_time("2025-01-01 06:00:00")
 def test_booking_at_now():
     turf = TurfBooking(slot_minutes=30)
     now = datetime.now()
     turf.book_slot(now)
     assert turf.get_bookings()[0][0] == now
+
 
 @freeze_time("2025-01-01 06:00:00")
 def test_empty_system_state():
