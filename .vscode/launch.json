@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Debug Tests",
+      "type": "python",
+      "request": "launch",
+      "python": "/opt/anaconda3/bin/python",
+      "module": "pytest",
+      "args": [
+        "${workspaceFolder}/tests/test_booking_system.py",
+        "-s"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: Debug File",
+      "type": "python",
+      "python": "/opt/anaconda3/bin/python",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}
